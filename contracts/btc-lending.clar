@@ -53,3 +53,20 @@
 ;; Balance Tracking
 (define-map collateral-balances { user: principal } uint)
 (define-map borrow-balances { user: principal } uint)
+
+;; Private Functions
+
+(define-private (validate-amount (amount uint)) 
+    (begin
+        (asserts! (> amount u0) ERR-ZERO-AMOUNT)
+        (ok true)))
+
+(define-private (check-authorization)
+    (begin
+        (asserts! (is-eq tx-sender CONTRACT-OWNER) ERR-NOT-AUTHORIZED)
+        (ok true)))
+
+(define-private (check-protocol-active)
+    (begin
+        (asserts! (not (var-get protocol-paused)) ERR-NOT-AUTHORIZED)
+        (ok true)))
