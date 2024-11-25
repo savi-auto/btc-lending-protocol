@@ -93,3 +93,13 @@
             )
                 (ok (/ (* collateral-value u100) borrowed-value)))
             (err u0))))
+
+(define-read-only (is-price-valid)
+    (< (- block-height (var-get last-price-update)) PRICE-VALIDITY-PERIOD))
+
+(define-read-only (get-protocol-stats)
+    {
+        total-loans: (var-get total-loans),
+        total-collateral: (var-get total-collateral),
+        current-fee: (var-get protocol-fee-percentage),
+        is-paused: (var-get protocol-paused)
