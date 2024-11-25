@@ -70,3 +70,11 @@
     (begin
         (asserts! (not (var-get protocol-paused)) ERR-NOT-AUTHORIZED)
         (ok true)))
+
+;; Read-Only Functions
+
+(define-read-only (get-loan (user principal))
+    (map-get? loans { user: user }))
+
+(define-read-only (get-collateral-balance (user principal))
+    (default-to u0 (map-get? collateral-balances { user: user })))
