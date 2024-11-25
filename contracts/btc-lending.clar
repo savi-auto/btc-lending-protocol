@@ -232,3 +232,12 @@
                     true)
                 
                 (ok true)))))
+
+;; Governance Functions
+
+(define-public (update-protocol-fee (new-fee uint))
+    (begin
+        (try! (check-authorization))
+        (asserts! (<= new-fee MAX-FEE-PERCENTAGE) ERR-EXCEED-MAX-FEE)
+        (var-set protocol-fee-percentage new-fee)
+        (ok true)))
