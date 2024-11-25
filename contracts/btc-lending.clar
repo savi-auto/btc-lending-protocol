@@ -78,3 +78,18 @@
 
 (define-read-only (get-collateral-balance (user principal))
     (default-to u0 (map-get? collateral-balances { user: user })))
+
+(define-read-only (get-borrow-balance (user principal))
+    (default-to u0 (map-get? borrow-balances { user: user })))
+
+(define-read-only (get-current-collateral-ratio (user principal))
+    (let (
+        (loan (get-loan user))
+    )
+        (match loan
+            loan-data (let (
+                (collateral-value (* (get collateral-amount loan-data) (var-get btc-price-in-cents)))
+                (borrowed-value (* (get borrowed-amount loan-data) u100))
+            )
+                (ok (/ (* collateral-value u100) borrowed-value)))
+            (err u0))))
