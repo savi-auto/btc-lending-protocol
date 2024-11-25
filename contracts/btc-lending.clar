@@ -32,3 +32,7 @@
 (define-data-var total-loans uint u0)
 (define-data-var total-collateral uint u0)
 (define-data-var protocol-fee-percentage uint u1) ;; 1% default fee
+
+;; Price Oracle Data
+(define-data-var btc-price-in-cents uint u0)
+(define-data-var last-price-update uint u0)
