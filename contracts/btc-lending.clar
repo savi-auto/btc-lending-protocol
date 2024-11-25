@@ -129,3 +129,33 @@
         
         (var-set total-collateral (+ (var-get total-collateral) amount))
         (ok true)))
+
+(define-public (borrow (amount uint))
+    (begin
+        (try! (check-protocol-active))
+        (try! (validate-amount amount))
+        
+        (let (
+            (current-collateral (get-collateral-balance tx-sender))
+            (current-loan (get-loan tx-sender))
+            (collateral-value (* current-collateral (var-get btc-price-in-cents)))
+        )
+            (asserts! (is-price-valid) ERR-PRICE-EXPIRED)
+            (asserts! (is-none current-loan) ERR-LOAN-EXISTS)
+            (asserts! (>= (* collateral-value u100) (* amount MIN-COLLATERAL-RATIO)) ERR-BELOW-MIN-COLLATERAL)
+            
+            (map-set loans 
+                { user: tx-sender }
+                {
+                    collateral-amount: current-collateral,
+                    borrowed-amount: amount,
+                    last-update: block-height,
+                    interest-rate: u5 ;; 5% APR
+                })
+            
+            (map-set borrow-balances 
+                { user: tx-sender }
+                (+ (get-borrow-balance tx-sender) amount))
+            
+            (var-set total-loans (+ (var-get total-loans) amount))
+            (ok true))))
