@@ -24,7 +24,6 @@
 (define-constant ERR-ZERO-AMOUNT (err u108))
 (define-constant ERR-EXCEED-MAX-FEE (err u109))
 
-
 ;; Data Variables
 
 ;; Protocol State
@@ -103,7 +102,7 @@
         total-collateral: (var-get total-collateral),
         current-fee: (var-get protocol-fee-percentage),
         is-paused: (var-get protocol-paused)
-	})
+    })
 
 ;; Public Functions
 
@@ -240,4 +239,10 @@
         (try! (check-authorization))
         (asserts! (<= new-fee MAX-FEE-PERCENTAGE) ERR-EXCEED-MAX-FEE)
         (var-set protocol-fee-percentage new-fee)
+        (ok true)))
+
+(define-public (toggle-protocol-pause)
+    (begin
+        (try! (check-authorization))
+        (var-set protocol-paused (not (var-get protocol-paused)))
         (ok true)))
