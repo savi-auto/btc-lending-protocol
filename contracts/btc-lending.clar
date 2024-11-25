@@ -23,3 +23,12 @@
 (define-constant ERR-PRICE-EXPIRED (err u107))
 (define-constant ERR-ZERO-AMOUNT (err u108))
 (define-constant ERR-EXCEED-MAX-FEE (err u109))
+
+
+;; Data Variables
+
+;; Protocol State
+(define-data-var protocol-paused bool false)
+(define-data-var total-loans uint u0)
+(define-data-var total-collateral uint u0)
+(define-data-var protocol-fee-percentage uint u1) ;; 1% default fee
