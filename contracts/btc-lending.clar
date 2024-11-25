@@ -103,3 +103,15 @@
         total-collateral: (var-get total-collateral),
         current-fee: (var-get protocol-fee-percentage),
         is-paused: (var-get protocol-paused)
+	})
+
+;; Public Functions
+
+;; Price Oracle Functions
+(define-public (update-btc-price (new-price-in-cents uint))
+    (begin
+        (try! (check-authorization))
+        (try! (validate-amount new-price-in-cents))
+        (var-set btc-price-in-cents new-price-in-cents)
+        (var-set last-price-update block-height)
+        (ok true)))
