@@ -115,3 +115,17 @@
         (var-set btc-price-in-cents new-price-in-cents)
         (var-set last-price-update block-height)
         (ok true)))
+
+;; Core Lending Functions
+(define-public (deposit-collateral (amount uint))
+    (begin
+        (try! (check-protocol-active))
+        (try! (validate-amount amount))
+        (try! (stx-transfer? amount tx-sender (as-contract tx-sender)))
+        
+        (map-set collateral-balances 
+            { user: tx-sender }
+            (+ (get-collateral-balance tx-sender) amount))
+        
+        (var-set total-collateral (+ (var-get total-collateral) amount))
+        (ok true)))
