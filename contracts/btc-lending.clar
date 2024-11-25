@@ -36,3 +36,20 @@
 ;; Price Oracle Data
 (define-data-var btc-price-in-cents uint u0)
 (define-data-var last-price-update uint u0)
+
+;; Maps
+
+;; Loan Data Structure
+(define-map loans 
+    { user: principal }
+    {
+        collateral-amount: uint,
+        borrowed-amount: uint,
+        last-update: uint,
+        interest-rate: uint
+    }
+)
+
+;; Balance Tracking
+(define-map collateral-balances { user: principal } uint)
+(define-map borrow-balances { user: principal } uint)
